@@ -72,4 +72,4 @@ with keyboard.Listener(on_press=on_press) as listener:
         pass
 
 # Close the log file when we're done. I only did this because it's just a testing.
-log_file.close()
+log_file.close() 
