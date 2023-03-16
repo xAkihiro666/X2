@@ -35,9 +35,5 @@ This is a Python Keylogger that tracks and logs all the keystrokes made by the u
 4. Press `Ctrl+C` to stop the keylogger
 5. Open the `keystrokes.log` file to view the logged keystrokes
 
-## License
-
-This project is licensed under the MIT License. See the `LICENSE` file for details.
-
 
 
