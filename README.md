@@ -23,6 +23,7 @@ This is a Python Keylogger that tracks and logs all the keystrokes made by the u
 ## Installation
 
 1. Clone the repository:
+> https://github.com/xAkihiro666/X2.git
 2. Install the required packages:
 > pip install -r requirements.txt
 
@@ -35,5 +36,6 @@ This is a Python Keylogger that tracks and logs all the keystrokes made by the u
 4. Press `Ctrl+C` to stop the keylogger
 5. Open the `keystrokes.log` file to view the logged keystrokes
 
+```test```
 
 
