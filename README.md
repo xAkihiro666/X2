@@ -2,7 +2,7 @@
   <img src="https://cdn-icons-png.flaticon.com/512/25/25231.png" width="200" height="200" alt="GitHub logo">
 </p>
 
-<h1 align="center">Keylogger Project</h1>
+<h1 align="center">X2 Keylogger Project</h1>
 
 <p align="center">
   <img src="https://img.shields.io/badge/Python-3.8%2B-blue.svg" alt="Python 3.8+">
