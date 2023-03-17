@@ -36,7 +36,7 @@ This is a Python Keylogger that tracks and logs all the keystrokes made by the u
 
 1. Clone the repository:
 ```
-https://github.com/xAkihiro666/X2.git
+git clone https://github.com/xAkihiro666/X2.git
 ```
 2. Install the required packages:
 ```
