@@ -1,0 +1,4 @@
+datetime==4.3
+psutil==5.8.0
+pynput==1.7.4
+pywin32==301
