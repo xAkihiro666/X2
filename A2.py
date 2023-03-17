@@ -23,7 +23,7 @@ current_window_title = None
 current_process_name = None
 
 # Another shit for the shift.
-shift_pressed = False
+# shift_pressed = False
 
 
 # This function gets called every time a key is pressed
