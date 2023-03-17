@@ -27,7 +27,7 @@ This is a Python Keylogger that tracks and logs all the keystrokes made by the u
 
 ## To Do (Not Really Sure If I'll Continue This)
 - [ ] Email Logging - I could do this easily, but I'll just update it with the screeshots
-- [ ] Screenshots
+- [x] Screenshots
 - [ ] GUI
 
 
