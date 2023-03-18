@@ -1,4 +1,5 @@
-datetime==4.3
-psutil==5.8.0
 pynput==1.7.4
-pywin32==301
+Pillow==8.4.0
+unidecode==1.3.2
+psutil==5.8.0
+pywin32==302
